@@ -256,7 +256,8 @@ listing-5.12: ./src/capitulo_5/5.12/socket-inet.o
 	$(CC) $(CFLAGS) -o socket-inet ./src/capitulo_5/5.12/socket-inet.o 
 	mv socket-inet ./bin/capitulo_5/5.12/
 	
-##  tifftest - libtiff library
+##compila ultimo porque se debe tener la libreria libtiff
+##  tifftest - libtiff library 
 listing-2.9: ./src/capitulo_2/2.9/tifftest.o
 	$(CC) -lm -ltiff $(CFLAGS) -o tifftest ./src/capitulo_2/2.9/tifftest.o 
 	mv tifftest ./bin/capitulo_2/2.9/ 
