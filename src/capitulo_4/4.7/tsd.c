@@ -9,7 +9,7 @@ static pthread_key_t thread_log_key;
 void write_to_thread_log (const char* message)
 {
 	FILE* thread_log = (FILE*) pthread_getspecific (thread_log_key);
-	fprintf (thread_log, “%s\n”, message);
+	fprintf (thread_log, "%s\n", message);
 }
 
 /* Close the log file pointer THREAD_LOG. */
@@ -24,12 +24,12 @@ void* thread_function (void* args)
 	char thread_log_filename[20];
 	FILE* thread_log;
 	/* Generate the filename for this thread’s log file. */
-	sprintf (thread_log_filename, “thread%d.log”, (int) pthread_self ());
+	sprintf (thread_log_filename, "thread%d.log", (int) pthread_self ());
 	/* Open the log file. */
-	thread_log = fopen (thread_log_filename, “w”);
+	thread_log = fopen (thread_log_filename, "w");
 	/* Store the file pointer in thread-specific data under thread_log_key. */
 	pthread_setspecific (thread_log_key, thread_log);
-	write_to_thread_log (“Thread starting.”);
+	write_to_thread_log ("Thread starting.");
 	/* Do work here... */
 	return NULL;
 }
