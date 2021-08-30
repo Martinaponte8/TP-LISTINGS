@@ -24,3 +24,9 @@ int process_transaction (int from_acct, int to_acct, float dollars)
 	pthread_setcancelstate (old_cancel_state, NULL);
 	return 0;
 }
+
+int main()
+{
+	return 0;
+}
+
