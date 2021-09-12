@@ -39,3 +39,8 @@ void* thread_function (void*)
 	}
 	return NULL;
 }
+
+int main()
+{
+	return 0;
+}
