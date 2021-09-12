@@ -19,6 +19,18 @@ class ThreadExitException
 		void* thread_return_value_;
 };
 
+
+void *doSomething() {
+
+
+}
+bool should_exit_thread_immediately () {
+ 
+ return false;
+ 
+
+}
+
 void do_some_work ()
 {
 	while (1) {
