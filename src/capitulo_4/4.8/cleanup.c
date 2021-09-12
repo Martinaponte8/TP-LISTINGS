@@ -27,3 +27,9 @@ void do_some_work ()
 	deallocate_buffer. */
 	pthread_cleanup_pop (1);
 }
+
+int main()
+{
+	return 0;
+}
+
