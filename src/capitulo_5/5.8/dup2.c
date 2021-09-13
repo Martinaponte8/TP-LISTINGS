@@ -5,39 +5,38 @@
 
 int main ()
 {
-	int fds[2];
-	pid_t pid;
-	/* Create a pipe. File descriptors for the two ends of the pipe are
-	placed in fds. */
-	pipe (fds);
-	/* Fork a child process. */
-	pid = fork ();
-	if (pid == (pid_t) 0) {
-		/* This is the child process. Close our copy of the write end of
-		the file descriptor. */
-		close (fds[1]);
-		/* Connect the read end of the pipe to standard input. */
-		dup2 (fds[0], STDIN_FILENO);
-		/* Replace the child process with the “sort” program. */
-		execlp (“sort”, “sort”, 0);
-	}
-	else {
-		/* This is the parent process. */
-		FILE* stream;
-		/* Close our copy of the read end of the file descriptor. */
-		close (fds[0]);
-		/* Convert the write file descriptor to a FILE object, and write
-		to it. */
-		stream = fdopen (fds[1], “w”);
-		fprintf (stream, “This is a test.\n”);
-		fprintf (stream, “Hello, world.\n”);
-		fprintf (stream, “My dog has fleas.\n”);
-		fprintf (stream, “This program is great.\n”);
-		fprintf (stream, “One fish, two fish.\n”);
-		fflush (stream);
-		close (fds[1]);
-		/* Wait for the child process to finish. */
-		waitpid (pid, NULL, 0);
-	}
-	return 0;
+  int fds[2];
+  pid_t pid;
+
+  /* Crea un pipe. Los descriptores de archivo para los dos extremos del pipe se colocan en fds.  */
+  pipe (fds);
+  /* Bifurca un proceso hijo. */
+  pid = fork ();
+  if (pid == (pid_t) 0) {
+    /* Este es el proceso hijo. Cierra nuestra copia del final de escritura del descriptor de archivo.  */
+    close (fds[1]);
+    /* Conecta el extremo de lectura del pipe a la entrada estándar.  */
+    dup2 (fds[0], STDIN_FILENO);
+    /* Reemplace el proceso hijo con el programa "sort".  */
+    execlp ("sort", "sort", 0);
+  }
+  else {
+    /* Este es el proceso padre  */
+    FILE* stream;
+    /* Cierra nuestra copia del final de lectura del descriptor de archivo.  */
+    close (fds[0]);
+    /* Convierta el descriptor del archivo de escritura en un objeto FILE y escriba en él.  */
+    stream = fdopen (fds[1], "w");
+    fprintf (stream, "Esto es un test.\n");
+    fprintf (stream, "Hello, world.\n");
+    fprintf (stream, "My dog has fleas.\n");
+    fprintf (stream, "This program is great.\n");
+    fprintf (stream, "One fish, two fish.\n");
+    fflush (stream);
+    close (fds[1]);
+    /*Espera a que finalice el proceso secundario.  */
+    waitpid (pid, NULL, 0);
+  }
+
+  return 0;
 }

@@ -2,62 +2,60 @@
 #include <stdio.h>
 #include <unistd.h>
 
-/* Write COUNT copies of MESSAGE to STREAM, pausing for a second
-between each. */
+/* Escribe COUNT copias de MESSAGE para STREAM, haciendo una pausa por un segundo
+    entre cada uno.  */
+
 void writer (const char* message, int count, FILE* stream)
 {
-	for (; count > 0; --count) {
-		/* Write the message to the stream, and send it off immediately. */
-		fprintf (stream, “%s\n”, message);
-		fflush (stream);
-		/* Snooze a while. */
-		sleep (1);
-	}
+  for (; count > 0; --count) {
+    /* Escribe el mensaje en la transmisión y envíalo de inmediato.  */
+    fprintf (stream, "%s\n", message);
+    fflush (stream);
+    /* Posponer un rato.  */
+    sleep (1);
+  }
 }
 
-/* Read random strings from the stream as long as possible. */
+/* Lee cadenas aleatorias de la transmisión el mayor tiempo posible. */
+
 void reader (FILE* stream)
 {
-	char buffer[1024];
-	/* Read until we hit the end of the stream. fgets reads until
-	either a newline or the end-of-file. */
-	while (!feof (stream)
-	&& !ferror (stream)
-	&& fgets (buffer, sizeof (buffer), stream) != NULL)
-	fputs (buffer, stdout);
+  char buffer[1024];
+  /* Lee hasta que lleguemos al final de la transmisión. fgets lee hasta una nueva línea o el final del archivo.  */
+  while (!feof (stream) 
+	 && !ferror (stream) 
+	 && fgets (buffer, sizeof (buffer), stream) != NULL) 
+    fputs (buffer, stdout);
 }
 
 int main ()
 {
-	int fds[2];
-	pid_t pid;
-	/* Create a pipe. File descriptors for the two ends of the pipe are
-	placed in fds. */
-	pipe (fds);
-	/* Fork a child process. */
-	pid = fork ();
-	
-	if (pid == (pid_t) 0) {
-		FILE* stream;
-		/* This is the child process. Close our copy of the write end of
-		the file descriptor. */
-		close (fds[1]);
-		/* Convert the read file descriptor to a FILE object, and read
-		from it. */
-		stream = fdopen (fds[0], “r”);
-		reader (stream);
-		close (fds[0]);
-	}
-	else {
-		/* This is the parent process. */
-		FILE* stream;
-		/* Close our copy of the read end of the file descriptor. */
-		close (fds[0]);
-		/* Convert the write file descriptor to a FILE object, and write
-		to it. */
-		stream = fdopen (fds[1], “w”);
-		writer (“Hello, world.”, 5, stream);
-		close (fds[1]);
-	}
-	return 0;
+  int fds[2];
+  pid_t pid;
+
+  /* Crea un pipe. Los descriptores de archivo para los dos extremos de la tubería se colocan en fds.  */
+  pipe (fds);
+  /* Bifurca un proceso hijo.  */
+  pid = fork ();
+  if (pid == (pid_t) 0) {
+    FILE* stream;
+    /* Este es el proceso hijo. Cierre nuestra copia del final de escritura del descriptor de archivo.  */
+    close (fds[1]);
+    /* Convierte el descriptor de archivo leído en un objeto FILE y lea de él. */
+    stream = fdopen (fds[0], "r");
+    reader (stream);
+    close (fds[0]);
+  }
+  else {
+    /* Este es el proceso padre  */
+    FILE* stream;
+    /* Cierre nuestra copia del final de lectura del descriptor de archivo.  */
+    close (fds[0]);
+    /* Convierte el descriptor del archivo de escritura en un objeto FILE y escriba en él. */
+    stream = fdopen (fds[1], "w");
+    writer ("Hola world!!!.", 7, stream);
+    close (fds[1]);
+  }
+
+  return 0;
 }
